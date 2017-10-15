@@ -8,6 +8,7 @@ CONVO_FILE = 'movie_conversations.txt'
 LINE_FILE = 'movie_lines.txt'
 OUTPUT_FILE = 'output_convo.txt'
 PROCESSED_PATH = 'processed_data'
+CPT_PATH = 'checkpoints'
 
 # min. num of times a word must appear to be added to vocab
 THRESHOLD = 1
