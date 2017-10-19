@@ -137,7 +137,7 @@ def eval_test_set(sess, model, test_buckets):
 def train():
     """ Train the bot """
     test_buckets, data_buckets, train_buckets_scale = get_buckets()
-    # in train mode, we need to create the backward path, so forwrad_only is False
+    # in train mode, we need to create the backward path, so forward_only is False
     model = ChatBotModel(False, config.BATCH_SIZE)
     model.build_graph()
 
@@ -223,7 +223,7 @@ def chat():
         output_file = open(os.path.join(config.PROCESSED_PATH, config.OUTPUT_FILE), 'a+')
         # Decode from standard input.
         max_length = config.BUCKETS[-1][0]
-        print('Welcome to TensorBro. Say something. Enter to exit. Max length is', max_length)
+        print('Talk to me! Enter to exit. Max length is', max_length)
         while True:
             line = str.encode(get_user_input())
             if len(line) > 0 and line[-1] == '\n':

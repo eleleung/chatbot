@@ -14,11 +14,10 @@ import re as regex
 import numpy as np
 
 import config
-import phrase_pair_dao as phrase_pair
 
 def prepare_raw_data():
     print('Splitting raw data into train set and test set...')
-    id2line = get_lines()
+    id2line = get_cornell_data_lines()
     convos = get_convos()
     questions, answers = question_answers(id2line, convos)
     prepare_dataset(questions, answers, config.TEST_SET_PERCENTAGE)
@@ -33,10 +32,10 @@ def process_data():
     token2id('test', 'enc')
     token2id('test', 'dec')
 
-def get_lines():
+def get_cornell_data_lines():
     """ Read all movie lines from movie_lines.txt """
     id2line = {}
-    file_path = os.path.join(config.DATA_PATH, config.LINE_FILE)
+    file_path = os.path.join(config.CORNELL_DATA_PATH, config.CORNELL_LINE_FILE)
     with open(file_path, 'rb') as f:
         lines = f.readlines()
         for line in lines:
@@ -49,7 +48,7 @@ def get_lines():
 
 def get_convos():
     """ Get conversation structure from the raw data movie_conversations.txt """
-    file_path = os.path.join(config.DATA_PATH, config.CONVO_FILE)
+    file_path = os.path.join(config.CORNELL_DATA_PATH, config.CORNELL_CONVO_FILE)
     convos = []
     with open(file_path, 'rb') as f:
         for line in f.readlines():
@@ -60,15 +59,27 @@ def get_convos():
                     convo.append(line[1:-1])
                 convos.append(convo)
 
-    return convos
+    return convos[:50]
 
-def question_answers(id2line, convos):
-    """ Divide the dataset into two sets: questions and answers. """
+def question_answers(id2line, cornell_convos, twitter_convos=None):
+    """ Divide the datasets into two sets: questions and answers """
     questions, answers = [], []
-    for convo in convos:
+
+    # add cornell data
+    for convo in cornell_convos:
         for index, line in enumerate(convo[:-1]):
             questions.append(id2line[convo[index]])
             answers.append(id2line[convo[index + 1]])
+
+    # add twitter data (might need to read line by line instead of loading all to memory)
+    file_path = os.path.join(config.TWITTER_DATA_PATH, config.TWITTER_CONVO_FILE)
+    with open(file_path, 'rb') as f:
+        lines = f.readlines()
+
+    for index in range(0, len(lines) - 1, 2):
+        questions.append(lines[index])
+        answers.append(lines[index + 1])
+
     assert len(questions) == len(answers)
     return questions, answers
 
@@ -82,7 +93,7 @@ def prepare_dataset(questions, answers, data_split=0.7):
     random.seed(0)
     cut_off = int(data_split * len(questions))
     with open('config.py', 'ab') as cf:
-        cf.write(b'\n' + b'TESTSET_SIZE = ' + str.encode(str(cut_off)) + b'\n')
+        cf.write(b'\n' + b'TESTSET_SIZE = ' + str.encode(str(cut_off)))
     test_ids = random.sample([i for i in range(len(questions))], cut_off)
 
     filenames = ['train.enc', 'train.dec', 'test.enc', 'test.dec']
@@ -131,7 +142,6 @@ def build_vocab(filename, normalize_digits=True):
     out_path = os.path.join(config.PROCESSED_PATH, 'vocab.{}'.format(filename[-3:]))
 
     vocab = {}
-    test_vocab = {}
 
     with open(in_path, 'rb') as f:
         for line in f.readlines():
@@ -151,7 +161,7 @@ def build_vocab(filename, normalize_digits=True):
             if vocab[word] < config.THRESHOLD:
                 with open('config.py', 'ab') as cf:
                     if filename[-3:] == 'enc':
-                        cf.write(b'ENC_VOCAB = ' + str.encode(str(index)) + b'\n')
+                        cf.write(b'\n' + b'ENC_VOCAB = ' + str.encode(str(index)) + b'\n')
                     else:
                         cf.write(b'DEC_VOCAB = ' + str.encode(str(index)) + b'\n')
                 break

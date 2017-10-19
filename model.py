@@ -2,25 +2,21 @@
 Defines the model and Tensorflow graph
 
 Code from:
+https://github.com/tensorflow/models/blob/master/tutorials/rnn/translate/seq2seq_model.py
 https://github.com/chiphuyen/stanford-tensorflow-tutorials/tree/master/assignments/chatbot
 """
 from __future__ import print_function
 
+import copy
 import time
 
-import numpy as np
 import tensorflow as tf
 
 import config
-import copy
-import pdb
-
-import phrase_pair_dao as phrase_pair
 
 class ChatBotModel(object):
     def __init__(self, forward_only, batch_size):
-        """forward_only: if set, we do not construct the backward pass in the model.
-        """
+        """ @forward_only: if set, we do not construct the backward pass in the model """
         print('Initialize new model')
         self.fw_only = forward_only
         self.batch_size = batch_size
@@ -43,9 +39,9 @@ class ChatBotModel(object):
         # If we use sampled softmax, we need an output projection.
         # Sampled softmax only makes sense if we sample less than vocabulary size.
         if config.NUM_SAMPLES > 0 and config.NUM_SAMPLES < config.DEC_VOCAB:
-            w = tf.get_variable('proj_w', [config.HIDDEN_SIZE, config.DEC_VOCAB],dtype=tf.float32)
+            w = tf.get_variable('proj_w', [config.HIDDEN_SIZE, config.DEC_VOCAB], dtype=tf.float32)
             w_t = tf.transpose(w)
-            b = tf.get_variable('proj_b', [config.DEC_VOCAB],dtype=tf.float32)
+            b = tf.get_variable('proj_b', [config.DEC_VOCAB], dtype=tf.float32)
             self.output_projection = (w, b)
 
         def sampled_loss(labels=None, logits=None):
@@ -74,6 +70,7 @@ class ChatBotModel(object):
     def create_loss(self):
         print('Creating loss... \nIt might take a couple of minutes depending on how many buckets you have.')
         start = time.time()
+
         def _seq2seq_f(encoder_inputs, decoder_inputs, do_decode):
             tmp_cell = copy.deepcopy(self.cell)
             return tf.contrib.legacy_seq2seq.embedding_attention_seq2seq(
