@@ -1,8 +1,8 @@
 """
 Trains and enables user interaction with the chatbot
 
-Code from:
-https://github.com/chiphuyen/stanford-tensorflow-tutorials/tree/master/assignments/chatbot
+Code based off:
+https://github.com/tensorflow/models/blob/master/tutorials/rnn/translate/
 """
 from __future__ import division
 from __future__ import print_function
@@ -47,7 +47,7 @@ def assert_lengths(encoder_size, decoder_size, encoder_inputs, decoder_inputs, d
 
 def run_step(sess, model, encoder_inputs, decoder_inputs, decoder_masks, bucket_id, forward_only):
     """
-    Run one step or pass in training.
+    Run one step or pass in training
     @forward_only: boolean value to decide whether a backward path should be created
 
     forward_only is set to True when you just want to evaluate on the test set,
@@ -87,8 +87,7 @@ def run_step(sess, model, encoder_inputs, decoder_inputs, decoder_masks, bucket_
 def get_buckets():
     """
     Load the dataset into buckets based on their lengths.
-    @train_buckets_scale is the interval that'll help us
-    choose a random bucket later on.
+    @train_buckets_scale is the interval to choose a random bucket later on.
     """
     test_buckets = data_utils.load_data('test_ids.enc', 'test_ids.dec')
     data_buckets = data_utils.load_data('train_ids.enc', 'train_ids.dec')
@@ -103,14 +102,12 @@ def get_buckets():
 
 
 def get_skip_step(iteration):
-    """ How many steps should the model train before it saves all the weights. """
     if iteration < 100:
         return 30
     return 100
 
 
 def check_restore_parameters(sess, saver):
-    """ Restore the previously trained parameters if there are any. """
     ckpt = tf.train.get_checkpoint_state(os.path.dirname(config.CPT_PATH + '/checkpoint'))
     if ckpt and ckpt.model_checkpoint_path:
         print("Loading parameters for the Chatbot")
@@ -119,7 +116,7 @@ def check_restore_parameters(sess, saver):
         print("Initializing fresh parameters for the Chatbot")
 
 
-def eval_test_set(sess, model, test_buckets):
+def eval_test_set(sess, model, test_buckets, testing_loss_summary, file_writer):
     """ Evaluate on the test set. """
     for bucket_id in range(len(config.BUCKETS)):
         if len(test_buckets[bucket_id]) == 0:
@@ -131,6 +128,12 @@ def eval_test_set(sess, model, test_buckets):
                                                                              batch_size=config.BATCH_SIZE)
         _, step_loss, _ = run_step(sess, model, encoder_inputs, decoder_inputs,
                                    decoder_masks, bucket_id, True)
+
+        bucket_value = testing_loss_summary.value.add()
+        bucket_value.tag = "testing_loss_bucket_%d" % bucket_id
+        bucket_value.simple_value = step_loss
+        file_writer.add_summary(testing_loss_summary, model.global_step.eval())
+
         print('Test bucket {}: loss {}, time {}'.format(bucket_id, step_loss, time.time() - start))
 
 def train():
@@ -152,6 +155,7 @@ def train():
 
         file_writer = tf.summary.FileWriter(os.path.join(config.LOG_PATH, 'tensorboard'), sess.graph)
         training_loss_summary = tf.Summary()
+        testing_loss_summary = tf.Summary()
         while True:
             skip_step = get_skip_step(iteration)
             bucket_id = get_random_bucket(train_buckets_scale)
@@ -163,21 +167,21 @@ def train():
             total_loss += step_loss
             iteration += 1
 
+            if iteration % 50 == 0:
+                bucket_value = training_loss_summary.value.add()
+                bucket_value.tag = "training_loss_bucket_%d" % bucket_id
+                bucket_value.simple_value = step_loss
+                file_writer.add_summary(training_loss_summary, model.global_step.eval())
+
             if iteration % skip_step == 0:
                 print('Iter {}: loss {}, time {}'.format(iteration, total_loss / skip_step, time.time() - start))
                 start = time.time()
                 total_loss = 0
                 saver.save(sess, os.path.join(config.CPT_PATH, 'chatbot'), global_step=model.global_step)
 
-                # write to tensorboard
-                bucket_value = training_loss_summary.value.add()
-                bucket_value.tag = "training_loss_bucket_%d" % bucket_id
-                bucket_value.simple_value = step_loss
-                file_writer.add_summary(training_loss_summary, model.global_step.eval())
-
                 if iteration % (10 * skip_step) == 0:
                     # Run evals on development set and print their loss
-                    eval_test_set(sess, model, test_buckets)
+                    eval_test_set(sess, model, test_buckets, testing_loss_summary, file_writer)
                     start = time.time()
                 sys.stdout.flush()
 
@@ -268,7 +272,6 @@ def main():
         data_utils.prepare_raw_data()
         data_utils.process_data()
     print('Data ready!')
-    # create checkpoints folder if there isn't one already
     data_utils.make_dir(config.CPT_PATH)
 
     train()

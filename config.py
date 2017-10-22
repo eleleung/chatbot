@@ -8,7 +8,7 @@ CORNELL_CONVO_FILE = 'movie_conversations.txt'
 CORNELL_LINE_FILE = 'movie_lines.txt'
 
 # twitter dataset path
-TWITTER_DATA_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/twitter_scraper/corpus/'
+TWITTER_DATA_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/twitter_scraper/twitter_data/'
 TWITTER_CONVO_FILE = 'cleaned_corpus.txt'
 
 OUTPUT_FILE = 'output_convo.txt'
@@ -17,7 +17,7 @@ CPT_PATH = 'models/model3/checkpoints'
 LOG_PATH = 'models/model3/logs'
 
 # min. num of times a word must appear to be added to vocab
-THRESHOLD = 2
+THRESHOLD = 3
 
 # reserved vocab tokens
 PAD_ID = 0
@@ -42,6 +42,3 @@ DROPOUT = 0.2
 
 NUM_SAMPLES = 512
 
-TESTSET_SIZE = 7544
-ENC_VOCAB = 6247
-DEC_VOCAB = 6106
