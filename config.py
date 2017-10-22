@@ -13,7 +13,8 @@ TWITTER_CONVO_FILE = 'cleaned_corpus.txt'
 
 OUTPUT_FILE = 'output_convo.txt'
 PROCESSED_PATH = 'processed_data'
-CPT_PATH = 'checkpoints'
+CPT_PATH = 'models/model3/checkpoints'
+LOG_PATH = 'models/model3/logs'
 
 # min. num of times a word must appear to be added to vocab
 THRESHOLD = 2
@@ -44,5 +45,3 @@ NUM_SAMPLES = 512
 TESTSET_SIZE = 7544
 ENC_VOCAB = 6247
 DEC_VOCAB = 6106
-
-

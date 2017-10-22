@@ -133,7 +133,6 @@ def eval_test_set(sess, model, test_buckets):
                                    decoder_masks, bucket_id, True)
         print('Test bucket {}: loss {}, time {}'.format(bucket_id, step_loss, time.time() - start))
 
-
 def train():
     """ Train the bot """
     test_buckets, data_buckets, train_buckets_scale = get_buckets()
@@ -150,6 +149,9 @@ def train():
 
         iteration = model.global_step.eval()
         total_loss = 0
+
+        file_writer = tf.summary.FileWriter(os.path.join(config.LOG_PATH, 'tensorboard'), sess.graph)
+        training_loss_summary = tf.Summary()
         while True:
             skip_step = get_skip_step(iteration)
             bucket_id = get_random_bucket(train_buckets_scale)
@@ -162,17 +164,20 @@ def train():
             iteration += 1
 
             if iteration % skip_step == 0:
-                file_writer = tf.summary.FileWriter(os.path.join(config.CPT_PATH, 'tensorboard'), sess.graph)
                 print('Iter {}: loss {}, time {}'.format(iteration, total_loss / skip_step, time.time() - start))
                 start = time.time()
                 total_loss = 0
                 saver.save(sess, os.path.join(config.CPT_PATH, 'chatbot'), global_step=model.global_step)
+
+                # write to tensorboard
+                bucket_value = training_loss_summary.value.add()
+                bucket_value.tag = "training_loss_bucket_%d" % bucket_id
+                bucket_value.simple_value = step_loss
+                file_writer.add_summary(training_loss_summary, model.global_step.eval())
+
                 if iteration % (10 * skip_step) == 0:
                     # Run evals on development set and print their loss
                     eval_test_set(sess, model, test_buckets)
-
-                    # save session.graph to be visualised by Tensorboard
-                    # file_writer = tf.summary.FileWriter(os.path.join(config.CPT_PATH, 'tensorboard'), sess.graph)
                     start = time.time()
                 sys.stdout.flush()
 

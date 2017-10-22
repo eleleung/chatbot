@@ -59,7 +59,7 @@ def get_convos():
                     convo.append(line[1:-1])
                 convos.append(convo)
 
-    return convos[:50]
+    return convos
 
 def question_answers(id2line, cornell_convos, twitter_convos=None):
     """ Divide the datasets into two sets: questions and answers """
