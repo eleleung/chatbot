@@ -11,13 +11,18 @@ CORNELL_LINE_FILE = 'movie_lines.txt'
 TWITTER_DATA_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/twitter_scraper/twitter_data/'
 TWITTER_CONVO_FILE = 'cleaned_corpus.txt'
 
+# friends dataset path
+FRIENDS_DATA_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/friends_corpus/corpus/'
+FRIENDS_RAW_DATA = 'friends-final.txt'
+FRIENDS_CONVO_FILE = 'cleaned_corpus.txt'
+
 OUTPUT_FILE = 'output_convo.txt'
 PROCESSED_PATH = 'processed_data'
 CPT_PATH = 'models/model3/checkpoints'
 LOG_PATH = 'models/model3/logs'
 
 # min. num of times a word must appear to be added to vocab
-THRESHOLD = 3
+THRESHOLD = 2
 
 # reserved vocab tokens
 PAD_ID = 0

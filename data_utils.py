@@ -71,14 +71,23 @@ def question_answers(id2line, cornell_convos, twitter_convos=None):
             questions.append(id2line[convo[index]])
             answers.append(id2line[convo[index + 1]])
 
-    # add twitter data (might need to read line by line instead of loading all to memory)
-    file_path = os.path.join(config.TWITTER_DATA_PATH, config.TWITTER_CONVO_FILE)
-    with open(file_path, 'rb') as f:
-        lines = f.readlines()
+    # add twitter data
+    twitter_file_path = os.path.join(config.TWITTER_DATA_PATH, config.TWITTER_CONVO_FILE)
+    with open(twitter_file_path, 'rb') as f:
+        twitter_lines = f.readlines()
 
-    for index in range(0, len(lines) - 1, 2):
-        questions.append(lines[index])
-        answers.append(lines[index + 1])
+    for index in range(0, len(twitter_lines) - 1, 2):
+        questions.append(twitter_lines[index])
+        answers.append(twitter_lines[index + 1])
+
+    # add friends data
+    friends_file_path = os.path.join(config.FRIENDS_DATA_PATH, config.FRIENDS_CONVO_FILE)
+    with open(friends_file_path, 'rb') as f:
+        friends_lines = f.readlines()
+
+    for index in range(0, len(friends_lines) - 1, 2):
+        questions.append(friends_lines[index])
+        answers.append(friends_lines[index + 1])
 
     assert len(questions) == len(answers)
     return questions, answers
