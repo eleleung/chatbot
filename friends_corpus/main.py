@@ -5,8 +5,6 @@
 
 
 def read_lines(character='JOEY', filename=None):
-    filename = "./corpus/friends-final.txt"
-
     with open("/Users/EleanorLeung/Documents/CITS4404/chatbot/friends_corpus/corpus/friends-final.txt", 'r') as f:
         lines = f.readlines()
 
