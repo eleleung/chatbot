@@ -1,3 +1,5 @@
+CITS4404 Group C1
+
 To run the Twitter Scraper, you need to create a 'config.yml file'. You will need to register
 a Twitter App to get the required Keys and Access Tokens.
 

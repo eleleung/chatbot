@@ -1,4 +1,5 @@
 """
+CITS4404 Group C1
 Defines the model and Tensorflow graph
 
 Code from:

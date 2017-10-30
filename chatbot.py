@@ -1,7 +1,9 @@
 """
+CITS4404 Group C1
 Trains and enables user interaction with the chatbot
 
-Code based off:
+Code from:
+https://github.com/chiphuyen/stanford-tensorflow-tutorials/tree/master/assignments/chatbot
 https://github.com/tensorflow/models/blob/master/tutorials/rnn/translate/
 """
 from __future__ import division
@@ -167,14 +169,14 @@ def train():
             total_loss += step_loss
             iteration += 1
 
-            if iteration % 50 == 0:
+            if iteration % skip_step == 0:
+                print('Iter {}: loss {}, time {}'.format(iteration, total_loss / skip_step, time.time() - start))
+
                 bucket_value = training_loss_summary.value.add()
                 bucket_value.tag = "training_loss_bucket_%d" % bucket_id
                 bucket_value.simple_value = step_loss
                 file_writer.add_summary(training_loss_summary, model.global_step.eval())
 
-            if iteration % skip_step == 0:
-                print('Iter {}: loss {}, time {}'.format(iteration, total_loss / skip_step, time.time() - start))
                 start = time.time()
                 total_loss = 0
                 saver.save(sess, os.path.join(config.CPT_PATH, 'chatbot'), global_step=model.global_step)
@@ -229,7 +231,7 @@ def chat():
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         check_restore_parameters(sess, saver)
-        output_file = open(os.path.join(config.PROCESSED_PATH, config.OUTPUT_FILE), 'a+')
+        output_file = open('/Users/EleanorLeung/Documents/CITS4404/chatbot/output_convo.txt', 'a+')
         # Decode from standard input.
         max_length = config.BUCKETS[-1][0]
         print('Talk to me! Enter to exit. Max length is', max_length)
@@ -242,7 +244,7 @@ def chat():
             output_file.write('HUMAN ++++ ' + str(line) + '\n')
             # Get token-ids for the input sentence.
             token_ids = data_utils.sentence2id(enc_vocab, line)
-            if (len(token_ids) > max_length):
+            if len(token_ids) > max_length:
                 print('Max length I can handle is:', max_length)
                 line = get_user_input()
                 continue
@@ -274,7 +276,7 @@ def main():
     print('Data ready!')
     data_utils.make_dir(config.CPT_PATH)
 
-    train()
+    chat()
 
     # if args.mode == 'train':
     #     train()

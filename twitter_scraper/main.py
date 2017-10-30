@@ -1,4 +1,7 @@
-""" Scrapes Twitter and writes tweets to file """
+"""
+CITS4404 Group C1
+Scrapes Twitter and writes tweets to file
+"""
 import os, sys, re, yaml, json
 import tweepy
 import time

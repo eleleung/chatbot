@@ -1,4 +1,5 @@
 """
+CITS4404 Group C1
 Pre-processes data to be fed into the model
 
 Code from:
@@ -18,7 +19,7 @@ import config
 def prepare_raw_data():
     print('Splitting raw data into train set and test set...')
     id2line = get_cornell_data_lines()
-    convos = get_convos()
+    convos = get_cornell_convos()
     questions, answers = question_answers(id2line, convos)
     prepare_dataset(questions, answers, config.TEST_SET_PERCENTAGE)
 
@@ -46,7 +47,7 @@ def get_cornell_data_lines():
                 id2line[parts[0]] = parts[4]
     return id2line
 
-def get_convos():
+def get_cornell_convos():
     """ Get conversation structure from the raw data movie_conversations.txt """
     file_path = os.path.join(config.CORNELL_DATA_PATH, config.CORNELL_CONVO_FILE)
     convos = []
@@ -61,7 +62,7 @@ def get_convos():
 
     return convos
 
-def question_answers(id2line, cornell_convos, twitter_convos=None):
+def question_answers(id2line, cornell_convos, twitter_convos=True, friends_convo=True):
     """ Divide the datasets into two sets: questions and answers """
     questions, answers = [], []
 

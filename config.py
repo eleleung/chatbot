@@ -1,4 +1,5 @@
 """
+CITS4404 Group C1
 Config parameters and hyperparameters
 """
 
@@ -12,17 +13,20 @@ TWITTER_DATA_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/twitter_scra
 TWITTER_CONVO_FILE = 'cleaned_corpus.txt'
 
 # friends dataset path
-FRIENDS_DATA_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/friends_corpus/corpus/'
+FRIENDS_DATA_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/friends_corpus/friends_data/'
 FRIENDS_RAW_DATA = 'friends-final.txt'
 FRIENDS_CONVO_FILE = 'cleaned_corpus.txt'
 
+# joey dataset
+JOEY_CONVO_FILE = 'joey_cleaned_corpus.txt'
+
 OUTPUT_FILE = 'output_convo.txt'
-PROCESSED_PATH = 'processed_data'
-CPT_PATH = 'models/model3/checkpoints'
-LOG_PATH = 'models/model3/logs'
+PROCESSED_PATH = 'processed_data/full_cornell+full_twitter+full_friends'
+CPT_PATH = 'models/full_cornell+full_twitter+full_friends/checkpoints'
+LOG_PATH = 'models/full_cornell+full_twitter+full_friends/logs'
 
 # min. num of times a word must appear to be added to vocab
-THRESHOLD = 2
+THRESHOLD = 3
 
 # reserved vocab tokens
 PAD_ID = 0
@@ -47,3 +51,12 @@ DROPOUT = 0.2
 
 NUM_SAMPLES = 512
 
+# full_cornell+full_twitter
+# TESTSET_SIZE = 151155
+# ENC_VOCAB = 33421
+# DEC_VOCAB = 31432
+
+# full_cornell+full_twitter+full_friends
+TESTSET_SIZE = 169410
+ENC_VOCAB = 34247
+DEC_VOCAB = 32277

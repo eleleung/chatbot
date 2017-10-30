@@ -1,4 +1,7 @@
-""" Cleans the twitter data """
+"""
+CITS4404 Group C1
+Cleans the twitter data
+"""
 
 import os
 import re

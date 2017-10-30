@@ -1,3 +1,8 @@
+"""
+CITS4404 Group C1
+
+DAOs for storing phrase pairs (question, answer) in Mongodb
+"""
 import pymongo
 
 client = pymongo.MongoClient("mongodb://localhost:27017/chatbot")
