@@ -17,14 +17,14 @@ import numpy as np
 import config
 
 def prepare_raw_data():
-    print('Splitting raw data into train set and test set...')
+    print('Splitting data into the training and testing sets')
     id2line = get_cornell_data_lines()
     convos = get_cornell_convos()
     questions, answers = question_answers(id2line, convos)
     prepare_dataset(questions, answers, config.TEST_SET_PERCENTAGE)
 
 def process_data():
-    print('Preparing data for model...')
+    print('Preparing data for model')
     build_vocab('train.enc')
     build_vocab('train.dec')
 
@@ -60,7 +60,7 @@ def get_cornell_convos():
                     convo.append(line[1:-1])
                 convos.append(convo)
 
-    return convos
+    return convos[:2000]
 
 def question_answers(id2line, cornell_convos, twitter_convos=True, friends_convo=True):
     """ Divide the datasets into two sets: questions and answers """
@@ -94,7 +94,6 @@ def question_answers(id2line, cornell_convos, twitter_convos=True, friends_convo
     return questions, answers
 
 def prepare_dataset(questions, answers, data_split=0.7):
-    # create path to store all the train & test encoder & decoder
     make_dir(config.PROCESSED_PATH)
 
     assert len(questions) == len(answers)
@@ -242,7 +241,6 @@ def _reshape_batch(inputs, size, batch_size):
 
 def get_batch(data_bucket, bucket_id, batch_size=1):
     """ Return one batch to feed into the model """
-    # only pad to the max length of the bucket
     encoder_size, decoder_size = config.BUCKETS[bucket_id]
     encoder_inputs, decoder_inputs = [], []
 
@@ -261,8 +259,6 @@ def get_batch(data_bucket, bucket_id, batch_size=1):
     for length_id in range(decoder_size):
         batch_mask = np.ones(batch_size, dtype=np.float32)
         for batch_id in range(batch_size):
-            # we set mask to 0 if the corresponding target is a PAD symbol.
-            # the corresponding decoder is decoder_input shifted by 1 forward.
             if length_id < decoder_size - 1:
                 target = decoder_inputs[batch_id][length_id + 1]
             if length_id == decoder_size - 1 or target == config.PAD_ID:

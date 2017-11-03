@@ -18,7 +18,7 @@ import config
 class ChatBotModel(object):
     def __init__(self, forward_only, batch_size):
         """ @forward_only: if set, we do not construct the backward pass in the model """
-        print('Initialize new model')
+        print('Initialise new model')
         self.fw_only = forward_only
         self.batch_size = batch_size
 
@@ -47,13 +47,9 @@ class ChatBotModel(object):
 
         def sampled_loss(labels=None, logits=None):
             labels = tf.reshape(labels, [-1, 1])
-            # We need to compute the sampled_softmax_loss using 32bit floats to
-            # avoid numerical instabilities.
             local_w_t = tf.cast(w_t, tf.float32)
             local_b = tf.cast(b, tf.float32)
             local_inputs = tf.cast(logits, tf.float32)
-            # return tf.nn.sampled_softmax_loss(tf.transpose(w), b, labels, logits,
-            #                                   config.NUM_SAMPLES, config.DEC_VOCAB)
             return tf.cast(
             tf.nn.sampled_softmax_loss(
                 weights=local_w_t,
@@ -69,7 +65,7 @@ class ChatBotModel(object):
         self.cell = tf.contrib.rnn.MultiRNNCell([single_cell] * config.NUM_LAYERS)
 
     def create_loss(self):
-        print('Creating loss... \nIt might take a couple of minutes depending on how many buckets you have.')
+        print('Creating loss')
         start = time.time()
 
         def _seq2seq_f(encoder_inputs, decoder_inputs, do_decode):
@@ -110,7 +106,7 @@ class ChatBotModel(object):
         print('Time:', time.time() - start)
 
     def create_optimizer(self):
-        print('Create optimizer... \nIt might take a couple of minutes depending on how many buckets you have.')
+        print('Create optimizer')
         with tf.variable_scope('training') as scope:
             self.global_step = tf.Variable(0, dtype=tf.int32, trainable=False, name='global_step')
 

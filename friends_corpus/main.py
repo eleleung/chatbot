@@ -1,13 +1,12 @@
 """
 CITS4404 Group C1
 
-Script that processes the entire Friends TV show dialogue and extracts questions and answers where
- answers are said by Joey
+Script that processes the entire Friends TV show dialogue and extracts questions and answers
 """
 
 
 def read_lines(character='JOEY', filename=None):
-    with open("/Users/EleanorLeung/Documents/CITS4404/chatbot/friends_corpus/corpus/friends-final.txt", 'r') as f:
+    with open("/Users/EleanorLeung/Documents/CITS4404/chatbot/data/friends-final.txt", 'r') as f:
         lines = f.readlines()
 
     questions, answers = [], []
@@ -25,7 +24,7 @@ def read_lines(character='JOEY', filename=None):
 
 
 def write_to_file(questions=None, answers=None, filename=None):
-    filename = "/Users/EleanorLeung/Documents/CITS4404/chatbot/friends_corpus/friends_data/joey_cleaned_corpus.txt"
+    filename = "/Users/EleanorLeung/Documents/CITS4404/chatbot/friends_corpus/friends_data/cleaned_corpus.txt"
 
     with open(filename, 'wb') as fw:
         for index in range(0, len(questions) - 1):

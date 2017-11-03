@@ -58,7 +58,6 @@ def run_step(sess, model, encoder_inputs, decoder_inputs, decoder_masks, bucket_
     encoder_size, decoder_size = config.BUCKETS[bucket_id]
     assert_lengths(encoder_size, decoder_size, encoder_inputs, decoder_inputs, decoder_masks)
 
-    # input feed: encoder inputs, decoder inputs, target_weights, as provided.
     input_feed = {}
     for step in range(encoder_size):
         input_feed[model.encoder_inputs[step].name] = encoder_inputs[step]
@@ -89,14 +88,13 @@ def run_step(sess, model, encoder_inputs, decoder_inputs, decoder_masks, bucket_
 def get_buckets():
     """
     Load the dataset into buckets based on their lengths.
-    @train_buckets_scale is the interval to choose a random bucket later on.
     """
     test_buckets = data_utils.load_data('test_ids.enc', 'test_ids.dec')
     data_buckets = data_utils.load_data('train_ids.enc', 'train_ids.dec')
     train_bucket_sizes = [len(data_buckets[b]) for b in range(len(config.BUCKETS))]
     print("Number of samples in each bucket:\n", train_bucket_sizes)
     train_total_size = sum(train_bucket_sizes)
-    # list of increasing numbers from 0 to 1 that we'll use to select a bucket.
+
     train_buckets_scale = [sum(train_bucket_sizes[:i + 1]) / train_total_size
                            for i in range(len(train_bucket_sizes))]
     print("Bucket scale:\n", train_buckets_scale)
@@ -141,7 +139,6 @@ def eval_test_set(sess, model, test_buckets, testing_loss_summary, file_writer):
 def train():
     """ Train the bot """
     test_buckets, data_buckets, train_buckets_scale = get_buckets()
-    # in train mode, we need to create the backward path, so forward_only is False
     model = ChatBotModel(False, config.BATCH_SIZE)
     model.build_graph()
 
@@ -241,14 +238,12 @@ def chat():
                 line = line[:-1]
             if line == '':
                 break
-            output_file.write('HUMAN ++++ ' + str(line) + '\n')
-            # Get token-ids for the input sentence.
+            output_file.write('HUMAN: ' + str(line) + '\n')
             token_ids = data_utils.sentence2id(enc_vocab, line)
             if len(token_ids) > max_length:
                 print('Max length I can handle is:', max_length)
                 line = get_user_input()
                 continue
-            # Which bucket does it belong to?
             bucket_id = find_right_bucket(len(token_ids))
             # Get a 1-element batch to feed the sentence to the model.
             encoder_inputs, decoder_inputs, decoder_masks = data_utils.get_batch([(token_ids, [])],
@@ -259,7 +254,7 @@ def chat():
                                            decoder_masks, bucket_id, True)
             response = construct_response(output_logits, inv_dec_vocab)
             print(response)
-            output_file.write('BOT ++++ ' + response + '\n')
+            output_file.write('BOT: ' + response + '\n')
         output_file.write('=============================================\n')
         output_file.close()
 
@@ -276,12 +271,10 @@ def main():
     print('Data ready!')
     data_utils.make_dir(config.CPT_PATH)
 
-    chat()
-
-    # if args.mode == 'train':
-    #     train()
-    # elif args.mode == 'chat':
-    #     chat()
+    if args.mode == 'train':
+        train()
+    elif args.mode == 'chat':
+        chat()
 
 
 if __name__ == '__main__':
