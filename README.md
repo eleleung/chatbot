@@ -38,8 +38,10 @@ To train the model from the raw data provided:
 
 1. Clone the repo
 2. In config.py, update the folder paths (replace '/Users/EleanorLeung/Documents/CITS4404/')
-3. Run data_utils.py to prepare the model for the data. The results will be placed in /processed_data
-4. Run chatbot.py with --mode=train to start training the model
+3. Run data_utils.py to prepare the model for the data. This will take some time (~30 minutes)and the results will be placed in /processed_data
+4. Run chatbot.py with --mode=train to start training the model. This will create a new folder /models that will contain
+a folder with checkpoints (/checkpoints) that saves the state of your model after a certain number of iterations.
+It will also create a log folder (/log) that contains TensorBoard summaries that you can visualise.
 5. Stop the training at your discretion (usually when the loss has stabilised)
 6. To test the model, run chatbot.py with --mode=chat to interact with it.
 7. If you would like to use the web interface, go into /ui and run app.py
