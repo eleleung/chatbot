@@ -9,7 +9,7 @@ CORNELL_CONVO_FILE = 'movie_conversations.txt'
 CORNELL_LINE_FILE = 'movie_lines.txt'
 
 # twitter dataset path
-TWITTER_DATA_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/twitter_scraper/twitter_data/'
+TWITTER_DATA_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/data/twitter_data/'
 TWITTER_CONVO_FILE = 'cleaned_corpus.txt'
 
 # friends dataset path
@@ -47,8 +47,3 @@ MAX_GRAD_NORM = 5.0
 DROPOUT = 0.2
 
 NUM_SAMPLES = 512
-
-# experiment_2
-TESTSET_SIZE = 169410
-ENC_VOCAB = 34247
-DEC_VOCAB = 32277
