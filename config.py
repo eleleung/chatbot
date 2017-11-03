@@ -18,9 +18,9 @@ FRIENDS_RAW_DATA = 'friends-final.txt'
 FRIENDS_CONVO_FILE = 'cleaned_corpus.txt'
 
 OUTPUT_FILE = 'output_convo.txt'
-PROCESSED_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/processed_data/experiment_1'
-CPT_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/models/full_cornell+full_twitter/checkpoints'
-LOG_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/models/full_cornell+full_twitter/logs'
+PROCESSED_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/processed_data/'
+CPT_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/models/checkpoints'
+LOG_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/models/logs'
 
 # min. num of times a word must appear to be added to vocab
 THRESHOLD = 2
@@ -49,6 +49,6 @@ DROPOUT = 0.2
 NUM_SAMPLES = 512
 
 # experiment_2
-# TESTSET_SIZE = 169410
-# ENC_VOCAB = 34247
-# DEC_VOCAB = 32277
+TESTSET_SIZE = 169410
+ENC_VOCAB = 34247
+DEC_VOCAB = 32277

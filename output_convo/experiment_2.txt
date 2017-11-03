@@ -54,8 +54,6 @@ HUMAN ++++ b'how old am i?\n'
 BOT ++++ with the end .
 HUMAN ++++ b'when will i die\n'
 BOT ++++ alright .
-HUMAN ++++ b'kill me\n'
-BOT ++++ will be good !
 HUMAN ++++ b'Donald Trump\n'
 BOT ++++ and the <unk>
 HUMAN ++++ b'when will you go to the store?\n'
