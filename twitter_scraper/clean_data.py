@@ -8,7 +8,7 @@ import re
 
 from datetime import datetime
 
-def read_raw_data(source_path='./twitter_data'):
+def read_raw_data(source_path='../data/twitter_data'):
     lines = []
     files = ["%s/%s" % (source_path, f) for f in os.listdir(source_path)]
     for f in files:

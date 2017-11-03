@@ -18,7 +18,7 @@ FRIENDS_RAW_DATA = 'friends-final.txt'
 FRIENDS_CONVO_FILE = 'cleaned_corpus.txt'
 
 OUTPUT_FILE = 'output_convo.txt'
-PROCESSED_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/processed_data/'
+PROCESSED_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/processed_data'
 CPT_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/models/checkpoints'
 LOG_PATH = '/Users/EleanorLeung/Documents/CITS4404/chatbot/models/logs'
 

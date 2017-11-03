@@ -1,8 +1,6 @@
 """
 CITS4404 Group C1
 Scrapes Twitter and writes tweets to file
-
-Code adapted from:
 """
 import os, sys, re, yaml, json
 import tweepy
@@ -26,7 +24,8 @@ class QueueListener(StreamListener):
         self.auth.set_access_token(cfg['access_token'], cfg['access_token_secret'])
         self.api = tweepy.API(self.auth)
 
-        self.write_file = "/Users/EleanroLeung/Documents/CITS4404/chatbot/data/twitter_data/%s.txt" \
+        # replace file path
+        self.write_file = "/Users/EleanorLeung/Documents/CITS4404/chatbot/data/twitter_data/%s.txt" \
                           % datetime.now().strftime("%Y%m%d_%H%M%S")
 
     def on_data(self, data):

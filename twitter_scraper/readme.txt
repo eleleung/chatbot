@@ -12,3 +12,9 @@ twitter:
   access_token: ACCESS_TOKEN
   access_token_secret: ACCESS_TOKEN_SECRET
 <end_file>
+
+Running steps:
+
+1. Run main.py until you are satisfied with the amount of data.
+
+2. Run clean_data.py to clean the data.
