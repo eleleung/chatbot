@@ -30,6 +30,9 @@ data_utils - pre-processes the data that is to be fed into the model
 
 model.py - the structure and architecture of the model
 
+### System Requirements
+You will need to install Python 3 and Tensorflow to be able to run this
+
 ### How to run the chatbot
 You will have to train the chatbot from scratch as checkpoints haven't been included
 in the submission due to their large size (checkpoints were over 1gb in size)
